@@ -54,6 +54,7 @@ let configs = [
   ("outerCousins", outerCousins),
   ("speedyOuterCousins", {...outerCousins, beat: 1000.}),
   ("wavy", {...outerCousins, sub: 50., wave: true, beat: 7000.}),
+  ("wavy", {...outerCousins, sub: 70., wave: true, beat: 5000.}),
 ];
 
 let circles = ({beat, main, sub, mainNum, subNum, fade, lines, trace, colored, wave}, ctx, t) => {
@@ -71,6 +72,7 @@ let circles = ({beat, main, sub, mainNum, subNum, fade, lines, trace, colored, w
   C.setGlobalAlpha(ctx, 0.2);
   let cx = 500.;
   let cy = 500.;
+  let alignmentScale = (sub === 0. ? 1. : sub /. main);
   for (i in 0 to (mainNum - 1)) {
     let theta = (float_of_int(i) /. float_of_int(mainNum) +. /*(float_of_int(i)) /. 100. +. */t /. beat) *. tau;
     let cpos = rotateAround((cx, cy), main, theta);
@@ -81,7 +83,8 @@ let circles = ({beat, main, sub, mainNum, subNum, fade, lines, trace, colored, w
       C.stroke(ctx);
     };
     for (j in 0 to (subNum - 1)) {
-      let theta = (t /. beat /. (sub === 0. ? 1. : sub /. main) +. float_of_int(j) /. float_of_int(subNum)) *. tau;
+      let percentAround = float_of_int(j) /. float_of_int(subNum);
+      let theta = (t /. beat /. 0.8 +. percentAround) *. tau;
       if (lines) {
         let posA = rotateAround(cpos, sub -. 15., theta);
         let posB = rotateAround(cpos, sub +. 15., theta);
